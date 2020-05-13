@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthenticationService} from '../../Services/authentication.service';
+import {TokenService} from '../../Services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -11,22 +12,22 @@ export class LoginComponent implements OnInit {
   username: string;
   password: string;
 
-  authService: AuthenticationService;
+  private authService: AuthenticationService;
+  tokenService: TokenService;
 
-  jwt: string;
-
-  constructor(authService: AuthenticationService) {
+  constructor(authService: AuthenticationService, tokenService: TokenService) {
     this.authService = authService;
-
-
-
+    this.tokenService = tokenService;
   }
 
   ngOnInit() {
   }
 
   async signIn(){
-    await this.authService.signin(this.username, this.password).subscribe(jwt => this.jwt = jwt);
+    await this.authService.signin(this.username, this.password).subscribe(jwt => {
+      this.tokenService.setToken(jwt);
+      this.tokenService.setIsLoggedIn(true);
+    });
   }
 
 }
