@@ -28,4 +28,17 @@ export class AuthenticationService {
       responseType: 'text'
     });
   }
+
+  signup(username: string, password: string, email: string) {
+    const toSend = new User();
+    toSend.setUsername(username);
+    toSend.setPassword(password);
+    toSend.setEmail(email);
+    return this.sendSignUpRequest(toSend);
+  }
+
+  sendSignUpRequest(user: User): Observable<string>{
+    console.log(user);
+    return this.http.post(this.newUserUrl, user, {responseType: 'text'} );
+  }
 }
